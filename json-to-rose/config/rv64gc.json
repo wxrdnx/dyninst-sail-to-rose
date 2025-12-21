@@ -27,9 +27,6 @@
       "na4_supported": true,
       "napot_supported": true
     },
-    // This controls global support for misaligned access so it is
-    // checked before address translation. "misaligned_fault" in
-    // "regions" is checked after address translation.
     "misaligned": {
       "supported": true,
       "byte_by_byte": false,
@@ -39,13 +36,11 @@
     "translation": {
       "dirty_update": false
     },
-    // Address to write DTB to (if provided).
     "dtb_address": {
       "len": 64,
       "value": "0x1000"
     },
     "regions": [
-      // ROM
       {
         "base": {
           "len": 64,
@@ -69,7 +64,6 @@
         },
         "include_in_device_tree": false
       },
-      // MMIO
       {
         "base": {
           "len": 64,
@@ -93,7 +87,6 @@
         },
         "include_in_device_tree": false
       },
-      // RAM
       {
         "base": {
           "len": 64,
@@ -126,7 +119,6 @@
     "hartid": 0,
     "cache_block_size_exp": 6,
     "clint": {
-      // This must be in a suitable memory region (see memory.regions).
       "base": 33554432,
       "size": 786432
     },
@@ -151,17 +143,6 @@
       "supported": true
     },
     "V": {
-      // `support_level` should be one of the below strings:
-      // . "Disabled" for no vector extension support
-      // . "Integer" for Zve*x support
-      // . "Float_single" for Zve*f support
-      // . "Float_double" for Zve*d support
-      // . "Full" for the full V extension
-      // Note that `support_level` requires compatible
-      // values for `vlen_exp` and `elen_exp` below.
-      // For e.g. Zve32x and Zve32f require `elen_exp` >= 5,
-      // Zve64x, Zve64f, and Zve64d require `elen_exp` >= 6,
-      // and V requires `elen_exp` >= 6 and `vlen_exp` >= 7.
       "support_level": "Disabled",
       "vlen_exp": 7,
       "elen_exp": 5,
