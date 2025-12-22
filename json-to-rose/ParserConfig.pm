@@ -36,6 +36,8 @@ use Tie::IxHash;
 use Exporter 'import';
 use lib "$FindBin::Bin";
 
+use ParserCommon qw(XLEN);
+
 use PrintROSE qw(
   print_indent
   print_load_init_code
@@ -91,9 +93,8 @@ our %ARGS_PER_SUBSET = %{
         UTYPE => ordered_hash(
             imm => {
                 init_code => sub {
-                    print_indent( "SgAsmExpression *imm = args[1];\n", 2 );
+                    print_indent( "BaseSemantics::SValuePtr imm = d->read(args[1], @{[XLEN]}, 0);\n", 2 );
                 },
-                need_read => 1,
             },
             rd => {
                 init_code =>
@@ -113,9 +114,8 @@ our %ARGS_PER_SUBSET = %{
         BTYPE => ordered_hash(
             imm => {
                 init_code => sub {
-                    print_indent( "SgAsmExpression *imm = args[2];\n", 2 );
+                    print_indent( "BaseSemantics::SValuePtr imm = d->read(args[2], @{[XLEN]}, 0);\n", 2 );
                 },
-                need_read => 1,
             },
             rs2 => {
                 init_code => sub {
@@ -140,9 +140,8 @@ our %ARGS_PER_SUBSET = %{
         ITYPE => ordered_hash(
             imm => {
                 init_code => sub {
-                    print_indent( "SgAsmExpression *imm = args[2];\n", 2 );
+                    print_indent( "BaseSemantics::SValuePtr imm = d->read(args[2], @{[XLEN]}, 0);\n", 2 );
                 },
-                need_read => 1,
             },
             rs1 => {
                 init_code => sub {
@@ -167,9 +166,8 @@ our %ARGS_PER_SUBSET = %{
         JAL => ordered_hash(
             imm => {
                 init_code => sub {
-                    print_indent( "SgAsmExpression *imm = args[1];\n", 2 );
+                    print_indent( "BaseSemantics::SValuePtr imm = d->read(args[1], @{[XLEN]}, 0);\n", 2 );
                 },
-                need_read => 1,
             },
             rd => {
                 init_code =>
@@ -181,9 +179,8 @@ our %ARGS_PER_SUBSET = %{
         JALR => ordered_hash(
             imm => {
                 init_code => sub {
-                    print_indent( "SgAsmExpression *rd = args[0];\n", 2 );
+                    print_indent( "BaseSemantics::SValuePtr imm = d->read(args[2], @{[XLEN]}, 0);\n", 2 );
                 },
-                need_read => 1,
             },
             rs1 => {
                 init_code => sub {
@@ -200,9 +197,8 @@ our %ARGS_PER_SUBSET = %{
         SHIFTIOP => ordered_hash(
             shamt => {
                 init_code => sub {
-                    print_indent( "SgAsmExpression *imm = args[2];\n", 2 );
+                    print_indent( "BaseSemantics::SValuePtr shamt = d->read(args[2], @{[XLEN]}, 0);\n", 2 );
                 },
-                need_read => 1,
             },
             rs1 => {
                 init_code => sub {
@@ -346,9 +342,8 @@ our %ARGS_PER_SUBSET = %{
         ADDIW => ordered_hash(
             imm => {
                 init_code => sub {
-                    print_indent( "SgAsmExpression *imm = args[2];\n", 2 );
+                    print_indent( "BaseSemantics::SValuePtr imm = d->read(args[2], @{[XLEN]}, 0);\n", 2 );
                 },
-                need_read => 1,
             },
             rs1 => {
                 init_code => sub {
@@ -391,9 +386,8 @@ our %ARGS_PER_SUBSET = %{
         SHIFTIWOP => ordered_hash(
             shamt => {
                 init_code => sub {
-                    print_indent( "SgAsmExpression *imm = args[2];\n", 2 );
+                    print_indent( "BaseSemantics::SValuePtr shamt = d->read(args[2], @{[XLEN]}, 0);\n", 2 );
                 },
-                need_read => 1,
             },
             rs1 => {
                 init_code => sub {

@@ -70,6 +70,7 @@ sub print_rose_code {
     if ( my $vars = $ParserConfig::ARGS_PER_SUBSET{$curr_set} ) {
         for my $var ( keys %$vars ) {
             $vars->{$var}{init_code}();
+            $lookup{$var} = { "is_arg_var" => 1 };
         }
     }
     else {
@@ -77,7 +78,7 @@ sub print_rose_code {
     }
     print("\n");
 
-    print_all_declare( $body_node, $curr_set, {} );
+    print_all_declare( $body_node, $curr_set, \%lookup );
     print_indent( "", 2 );
     print_ast( $body_node, $curr_set, \%lookup, 2 );
     print(";\n");
@@ -110,6 +111,7 @@ sub print_declare {
 
 sub print_declare_if_undeclared {
     my ( $var_name, $lookup, $indent_lvl ) = @_;
+
     if ( !exists $lookup->{$var_name} ) {
         print_declare( $var_name, $indent_lvl );
     }
