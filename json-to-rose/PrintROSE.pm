@@ -160,17 +160,17 @@ sub print_switch {
 
                    # In Capstone, AQ and RL are treated as separate instructions
                    # Thus, we need to add all these cases back
-                    print_indent( "case ${key}_w: \n",       $indent_lvl + 1 );
-                    print_indent( "case ${key}_w_aq: \n",    $indent_lvl + 1 );
-                    print_indent( "case ${key}_w_aq_rl: \n", $indent_lvl + 1 );
-                    print_indent( "case ${key}_w_rl: \n",    $indent_lvl + 1 );
-                    print_indent( "case ${key}_d: \n",       $indent_lvl + 1 );
-                    print_indent( "case ${key}_d_aq: \n",    $indent_lvl + 1 );
-                    print_indent( "case ${key}_d_aq_rl: \n", $indent_lvl + 1 );
-                    print_indent( "case ${key}_d_rl: \n",    $indent_lvl + 1 );
+                    print_indent( "case ${key}_w: {\n",       $indent_lvl + 1 );
+                    print_indent( "case ${key}_w_aq: {\n",    $indent_lvl + 1 );
+                    print_indent( "case ${key}_w_aq_rl: {\n", $indent_lvl + 1 );
+                    print_indent( "case ${key}_w_rl: {\n",    $indent_lvl + 1 );
+                    print_indent( "case ${key}_d: {\n",       $indent_lvl + 1 );
+                    print_indent( "case ${key}_d_aq: {\n",    $indent_lvl + 1 );
+                    print_indent( "case ${key}_d_aq_rl: {\n", $indent_lvl + 1 );
+                    print_indent( "case ${key}_d_rl: {\n",    $indent_lvl + 1 );
                 }
                 else {
-                    print_indent( "case $key: \n", $indent_lvl + 1 );
+                    print_indent( "case $key: {\n", $indent_lvl + 1 );
                 }
             }
             else {
@@ -193,9 +193,10 @@ sub print_switch {
             }
         }
     }
-    print_indent( "default:\n",   $indent_lvl + 1 );
+    print_indent( "default: {\n", $indent_lvl + 1 );
     print_indent( "assert(0);\n", $indent_lvl + 2 );
     print_indent( "break;\n",     $indent_lvl + 2 );
+    print_indent( "}\n",          $indent_lvl + 1 );
     print_indent( "}",            $indent_lvl );
 }
 
