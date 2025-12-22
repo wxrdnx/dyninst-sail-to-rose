@@ -38,6 +38,8 @@ use ASTNode;
 use ASTAdjust;
 use ParserCommon qw(INDENT XLEN);
 
+use Data::Dumper;
+
 our @EXPORT_OK = qw(
   print_indent
   print_load_init_code
@@ -63,6 +65,7 @@ sub print_rose_code {
     ASTAdjust::adjust_signedness( $body_node, $curr_set );
     ASTAdjust::adjust_mul_div_rem_signedness( $body_node, $curr_set, {} );
     ASTAdjust::adjust_func_operands( $body_node, $curr_set );
+    ASTAdjust::adjust_next_node( $body_node, $curr_set );
 
     print_indent( "struct IP_$curr_set : P {\n",                     0 );
     print_indent( "void p(D d, Ops ops, I insn, A args, B raw) {\n", 1 );
@@ -161,13 +164,13 @@ sub print_switch {
 
                    # In Capstone, AQ and RL are treated as separate instructions
                    # Thus, we need to add all these cases back
-                    print_indent( "case ${key}_w: {\n",       $indent_lvl + 1 );
-                    print_indent( "case ${key}_w_aq: {\n",    $indent_lvl + 1 );
-                    print_indent( "case ${key}_w_aq_rl: {\n", $indent_lvl + 1 );
-                    print_indent( "case ${key}_w_rl: {\n",    $indent_lvl + 1 );
-                    print_indent( "case ${key}_d: {\n",       $indent_lvl + 1 );
-                    print_indent( "case ${key}_d_aq: {\n",    $indent_lvl + 1 );
-                    print_indent( "case ${key}_d_aq_rl: {\n", $indent_lvl + 1 );
+                    print_indent( "case ${key}_w:\n",       $indent_lvl + 1 );
+                    print_indent( "case ${key}_w_aq:\n",    $indent_lvl + 1 );
+                    print_indent( "case ${key}_w_aq_rl:\n", $indent_lvl + 1 );
+                    print_indent( "case ${key}_w_rl:\n",    $indent_lvl + 1 );
+                    print_indent( "case ${key}_d:\n",       $indent_lvl + 1 );
+                    print_indent( "case ${key}_d_aq:\n",    $indent_lvl + 1 );
+                    print_indent( "case ${key}_d_aq_rl:\n", $indent_lvl + 1 );
                     print_indent( "case ${key}_d_rl: {\n",    $indent_lvl + 1 );
                 }
                 else {
