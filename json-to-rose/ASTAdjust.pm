@@ -858,4 +858,33 @@ sub adjust_mul_div_rem_signedness {
     }
 }
 
+sub adjust_next_node {
+    my ( $node, $curr_set, $lookup ) = @_;
+    my @child_siblings;
+    for my $child ( @{ $node->get_children() } ) {
+        adjust_next_node( $child, $curr_set, $lookup );
+    }
+    if ($node->is_func_node() ) {
+        if ($node->is_op(ASTType::ROSE_OP_ITE)) {
+            my $if_node = $node->get_nth_child(1);
+            my $else_node = $node->get_nth_child(2);
+            if ($if_node->is_block_node() && $else_node->is_block_node()) {
+                my @new_siblings = @{ $node->get_siblings() };
+                for my $child_node (@{ $else_node->get_children() }) {
+                    unshift @new_siblings, @{ $child_node->get_siblings() };
+                    $child_node->set_siblings([]);
+                }
+                for my $child_node (@{ $if_node->get_children() }) {
+                    unshift @new_siblings, @{ $child_node->get_siblings() };
+                    $child_node->set_siblings([]);
+                }
+                $node->set_siblings(\@new_siblings);
+            }
+        }
+    }
+    for my $sibling ( @{ $node->get_siblings() } ) {
+        adjust_next_node( $sibling, $curr_set, $lookup );
+    }
+}
+
 1;

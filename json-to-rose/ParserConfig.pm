@@ -611,6 +611,9 @@ our %GLOBAL_VARS = (
     xlen => {
         value => 64
     },
+    xlen_bytes => {
+        value => 8
+    },
     log2_xlen => {
         value => 6
     },
