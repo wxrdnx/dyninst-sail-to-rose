@@ -302,7 +302,7 @@ our %ARGS_PER_SUBSET = %{
             },
             width => {
                 init_code => sub {
-                    print_indent( "size_t width = lrsc_width_str(insn)\n", 2 );
+                    print_indent( "size_t width = lrsc_width_str(insn);\n", 2 );
                 },
                 need_number => 1,
             },
@@ -328,7 +328,7 @@ our %ARGS_PER_SUBSET = %{
             },
             width => {
                 init_code => sub {
-                    print_indent( "size_t width = lrsc_width_str(insn)\n", 2 );
+                    print_indent( "size_t width = lrsc_width_str(insn);\n", 2 );
                 },
                 need_number => 1,
             },
@@ -432,7 +432,7 @@ our %ARGS_PER_SUBSET = %{
             },
             width => {
                 init_code => sub {
-                    print_indent( "size_t width = lrsc_width_str(insn)\n", 2 );
+                    print_indent( "size_t width = lrsc_width_str(insn);\n", 2 );
                 },
                 need_number => 1,
             },
