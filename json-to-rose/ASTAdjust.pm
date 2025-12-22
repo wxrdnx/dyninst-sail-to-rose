@@ -304,6 +304,11 @@ sub adjust_func_operands {
             if ( $child0->is_num_node() ) {
                 $child0->set_type(ASTType::LIT_ID);
             }
+
+            my $child1 = $node->get_nth_child(1);
+            if ($child1->is_func_node()) {
+                $node->set_node($child1);
+            }
         }
 
     }
@@ -348,7 +353,7 @@ sub adjust_signedness {
             && $child_node->has_attribute("signedness") )
         {
             $node->get_value()
-              ->set_attribute( "signedness",
+              ->add_attribute( "signedness",
                 $child_node->get_attribute("signedness") );
         }
 
@@ -361,7 +366,7 @@ sub adjust_signedness {
             && $child_node->get_nth_child(1)->has_attribute("signedness")
             && $child_node->get_nth_child(2)->has_attribute("signedness") )
         {
-            $node->get_value()->set_attribute( "ite_signedness", 1 );
+            $node->get_value()->add_attribute( "ite_signedness", 1 );
         }
     }
 

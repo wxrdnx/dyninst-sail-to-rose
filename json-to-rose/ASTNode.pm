@@ -419,7 +419,7 @@ sub has_attribute {
     return exists $self->{attributes}{$attr_key};
 }
 
-sub set_attribute {
+sub add_attribute {
     my ( $self, $attr_key, $attr_value ) = @_;
     $self->{attributes}{$attr_key} = $attr_value;
 }
@@ -429,6 +429,11 @@ sub get_attribute {
     die "Unexpected error: Unknown attribute $attr_key"
       unless exists $self->{attributes}{$attr_key};
     return $self->{attributes}{$attr_key};
+}
+
+sub get_attributes {
+    my ( $self ) = @_;
+    return $self->{attributes};
 }
 
 sub get_type {
@@ -458,6 +463,13 @@ sub get_siblings {
     return $self->{siblings};
 }
 
+sub get_nth_sibling {
+    my ( $self, $index ) = @_;
+    die "Unexpected Error: Invalid index $index"
+      unless $index >= 0 && $index < scalar @{ $self->{siblings} };
+    return $self->{siblings}[$index];
+}
+
 sub set_type {
     my ( $self, $type ) = @_;
     $self->{type} = $type;
@@ -466,6 +478,11 @@ sub set_type {
 sub set_value {
     my ( $self, $value ) = @_;
     $self->{value} = $value;
+}
+
+sub set_attributes {
+    my ( $self, $attrs ) = @_;
+    $self->{attributes} = $attrs;
 }
 
 sub set_children {
@@ -478,6 +495,16 @@ sub set_nth_child {
     $self->{children}[$index] = $child;
 }
 
+sub set_siblings {
+    my ($self, $siblings) = @_;
+    $self->{siblings} = $siblings;
+}
+
+sub set_nth_sibling {
+    my ( $self, $index, $sibling ) = @_;
+    $self->{siblings}[$index] = $sibling;
+}
+
 sub is_type {
     my ( $self, $type ) = @_;
     return $self->{type} eq $type;
@@ -487,6 +514,15 @@ sub is_op {
     my ( $self, $op ) = @_;
     die "Unexpected Error: Not a function node" unless $self->is_func_node();
     return $self->get_value() eq $op;
+}
+
+sub set_node {
+    my ( $self, $to_copy ) = @_;
+    $self->set_value($to_copy->get_value());
+    $self->set_type($to_copy->get_type());
+    $self->set_attributes($to_copy->get_attributes());
+    $self->set_children($to_copy->get_children());
+    $self->set_siblings($to_copy->get_siblings());
 }
 
 1;

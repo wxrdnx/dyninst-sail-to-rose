@@ -93,8 +93,8 @@ sub unary_op_tmpl {
     my ( $self, $rose_func, $exps_ast, $curr_set ) = @_;
     my @exp_nodes     = map { $self->do_exp( $_, $curr_set ) } @$exps_ast;
     my $unary_op_node = ASTNode->new_func_node( $rose_func, \@exp_nodes );
-    $unary_op_node->set_attribute( "unary_op",          1 );
-    $unary_op_node->set_attribute( "is_const_foldable", 1 );
+    $unary_op_node->add_attribute( "unary_op",          1 );
+    $unary_op_node->add_attribute( "is_const_foldable", 1 );
     return $unary_op_node;
 }
 
@@ -102,8 +102,8 @@ sub binary_op_tmpl {
     my ( $self, $rose_func, $exps_ast, $curr_set ) = @_;
     my @exp_nodes      = map { $self->do_exp( $_, $curr_set ) } @$exps_ast;
     my $binary_op_node = ASTNode->new_func_node( $rose_func, \@exp_nodes );
-    $binary_op_node->set_attribute( "binary_op",         1 );
-    $binary_op_node->set_attribute( "is_const_foldable", 1 );
+    $binary_op_node->add_attribute( "binary_op",         1 );
+    $binary_op_node->add_attribute( "is_const_foldable", 1 );
     return $binary_op_node;
 }
 
@@ -238,7 +238,7 @@ our @FN_DISPATCH = (
         sub {
             my ( $self, $exps_ast, $curr_set ) = @_;
             my $n = $self->do_exp( $exps_ast->[0], $curr_set );
-            $n->set_attribute( "signedness", 1 );
+            $n->add_attribute( "signedness", 1 );
             return $n;
         }
     ],
@@ -248,7 +248,7 @@ our @FN_DISPATCH = (
         sub {
             my ( $self, $exps_ast, $curr_set ) = @_;
             my $n = $self->do_exp( $exps_ast->[0], $curr_set );
-            $n->set_attribute( "signedness", 0 );
+            $n->add_attribute( "signedness", 0 );
             return $n;
         }
     ],
