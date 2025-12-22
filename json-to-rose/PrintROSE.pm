@@ -105,7 +105,6 @@ sub print_indent {
 
 sub print_declare {
     my ( $var_name, $indent_lvl ) = @_;
-    $var_name = ParserCommon::rename_invalid_id($var_name);
     print_indent( "BaseSemantics::SValuePtr $var_name;\n", $indent_lvl );
 }
 
@@ -131,7 +130,7 @@ sub print_assign {
     for my $i ( 0 .. $#lhs_nodes ) {
         my $var_node   = $lhs_nodes[$i];
         my $value_node = $rhs_nodes[$i];
-        my $var = ParserCommon::rename_invalid_id( $var_node->get_value() );
+        my $var = $var_node->get_value();
         print("$var = ");
         print_ast( $value_node, $curr_set, $lookup, $indent_lvl );
         $lookup->{$var} = { "var" => $var_node, "ref" => $value_node };
