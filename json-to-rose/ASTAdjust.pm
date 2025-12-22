@@ -31,6 +31,8 @@ package ASTAdjust;
 use strict;
 use warnings;
 
+use Data::Dumper;
+
 use Exporter 'import';
 use lib "$FindBin::Bin";
 use ParserCommon qw(
@@ -254,8 +256,14 @@ sub adjust_func_operands {
         if ( $node->is_op(ASTType::ROSE_OP_READ_MEM) ) {
 
             # Add Implicit width
-            my $width_bytes_node = ASTNode->new_var_node(WIDTH_BYTES_VAR);
+            my $width_bytes_node = ASTNode->new_id_node(WIDTH_BYTES_VAR);
             push @$func_args, $width_bytes_node;
+        }
+        elsif ( $node->is_op(ASTType::ROSE_OP_WRITE_MEM) ) {
+
+            # Add Implicit width
+            my $width_bytes_node = ASTNode->new_id_node(WIDTH_BYTES_VAR);
+            splice @$func_args, 1, 0, $width_bytes_node;
         }
         elsif ($node->is_op(ASTType::ROSE_OP_READ_REG)
             || $node->is_op(ASTType::ROSE_OP_READ_IMM) )
@@ -299,9 +307,9 @@ sub adjust_func_operands {
         }
         elsif ( $func_op eq ASTType::ROSE_OP_NUMBER ) {
             # The first operand should be a plain integer
-            # It should not be wrapped in ops->number_())
+            # It should not be wrapped in ops->number_()
             my $child0 = $node->get_nth_child(0);
-            if ( $child0->is_num_node() ) {
+            if ( $child0->is_num_node() || $child0->is_bool_node() ) {
                 $child0->set_type(ASTType::LIT_ID);
             }
 
@@ -310,7 +318,14 @@ sub adjust_func_operands {
                 $node->set_node($child1);
             }
         }
-
+        elsif ( $func_op eq ASTType::ROSE_OP_BOOL ) {
+            # The first operand should be a plain integer
+            # It should not be wrapped in ops->number_() or ops->boolean_()
+            my $child0 = $node->get_nth_child(0);
+            if ( $child0->is_num_node() || $child0->is_bool_node() ) {
+                $child0->set_type(ASTType::LIT_ID);
+            }
+        }
     }
     for my $sibling ( @{ $node->get_siblings() } ) {
         adjust_func_operands( $sibling, $curr_set );
@@ -577,7 +592,7 @@ sub adjust_mul_div_rem_signedness {
                             ASTType::ROSE_OP_BOOL,
                             [
                                 ASTNode->new_func_node(
-                                    ASTType::ROSE_OP_BAND, [$rhs_cond]
+                                    ASTType::ROSE_OP_BNOT, [$rhs_cond]
                                 )
                             ]
                         ),
@@ -593,7 +608,7 @@ sub adjust_mul_div_rem_signedness {
                             ASTType::ROSE_OP_BOOL,
                             [
                                 ASTNode->new_func_node(
-                                    ASTType::ROSE_OP_BAND, [$rhs_cond]
+                                    ASTType::ROSE_OP_BNOT, [$rhs_cond]
                                 )
                             ]
                         ),

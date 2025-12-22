@@ -61,8 +61,8 @@ sub print_rose_code {
     ASTAdjust::adjust_match( $body_node, $curr_set );
     ASTAdjust::adjust_const_fold( $body_node, $curr_set );
     ASTAdjust::adjust_signedness( $body_node, $curr_set );
-    ASTAdjust::adjust_func_operands( $body_node, $curr_set );
     ASTAdjust::adjust_mul_div_rem_signedness( $body_node, $curr_set, {} );
+    ASTAdjust::adjust_func_operands( $body_node, $curr_set );
 
     print_indent( "struct IP_$curr_set : P {\n",                     0 );
     print_indent( "void p(D d, Ops ops, I insn, A args, B raw) {\n", 1 );
@@ -649,7 +649,6 @@ sub print_div_init_code {
 
 sub print_rem_init_code {
     my ($indent_lvl) = @_;
-    print_indent( "int is_unsigned;\n",            $indent_lvl );
     print_indent( "switch (insn->get_kind()) {\n", $indent_lvl );
     print_indent( "case rose_riscv64_op_rem:\n",   $indent_lvl + 1 );
     print_indent( "is_unsigned = 1;\n",            $indent_lvl + 2 );

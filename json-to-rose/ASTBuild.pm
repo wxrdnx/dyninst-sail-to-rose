@@ -586,9 +586,8 @@ sub do_exp {
                 # Now, we construct the write address node
                 my $write_data_node =
                   $self->do_exp( $app_ast->[1]->[3], $curr_set );
-                my $impl_width_bytes = ASTNode->new_var_node(WIDTH_BYTES_VAR);
                 my $mem_write_node = ASTNode->new_func_node( ROSE_OP_WRITE_MEM,
-                    [ $ea_target_node, $impl_width_bytes, $write_data_node ] );
+                    [ $ea_target_node, $write_data_node ] );
 
                 # Ignore Ok and Err pattern
                 # They are related to whether the reservation failed
@@ -655,9 +654,8 @@ sub do_exp {
 
                 my $write_data_node =
                   $self->do_exp( $app_ast->[1]->[2], $curr_set );
-                my $impl_width_bytes = ASTNode->new_var_node(WIDTH_BYTES_VAR);
                 my $mem_write_node = ASTNode->new_func_node( ROSE_OP_WRITE_MEM,
-                    [ $addr_node, $impl_width_bytes, $write_data_node ] );
+                    [ $addr_node, $write_data_node ] );
 
                 # Finally, construct the next block node in Ok(result)
                 my $next_ast  = $ok_asts[0]->{Pat_exp}->[1];
